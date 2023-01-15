@@ -17,25 +17,25 @@ public class BillPayPhoneContract extends Contract {
     }
 
     @Override
-    protected boolean checkCallAvailability(int seconds) {
-        setVoiceEventsTime(getVoiceEventsTime() + seconds);
-        return true;
+    protected int availableCallSeconds(int seconds) {
+        voiceEventsTime = voiceEventsTime + seconds;
+        return seconds;
     }
 
     @Override
     protected boolean checkSmsAvailability() {
-        setSmsAmount(getSmsAmount() + 1);
+        smsAmount++;
         return true;
     }
 
     @Override
     protected boolean checkMmsAvailability() {
-        setMmsAmount(getMmsAmount() + 1);
+        mmsAmount++;
         return true;
     }
 
     @Override
-    public void printAccountState() {
-        super.printAccountState();
+    protected void consumeData(int soconds) {
+
     }
 }

@@ -37,41 +37,52 @@ public class MixPhoneContract extends CardPhoneContract {
         this.remainingMinutes = remainingMinutes;
     }
 
-    @Override
-    protected boolean checkCallAvailability(int seconds) {
-        double secondsInMinute = (double) seconds / 60;
-        double feeForSecond = getMinuteCallFee() / 60;
-        if (remainingMinutes >= secondsInMinute) {
-            remainingMinutes -= secondsInMinute;
-            setVoiceEventsTime(getVoiceEventsTime() + seconds);
-            return true;
-        } else if (getCreditBalance() >= getMinuteCallFee()) {
-            setCreditBalance(getCreditBalance() - (feeForSecond * seconds));
-            setVoiceEventsTime(getVoiceEventsTime() + seconds);
-            return true;
+    protected void consumeData(int seconds) {
+        double secondsAsMinute = (double) seconds / 60;
+        if (remainingMinutes >= secondsAsMinute) {
+            remainingMinutes -= secondsAsMinute;
+            voiceEventsTime = voiceEventsTime + seconds;
         } else {
-            return false;
+            double feeForSecond = minuteCallFee / 60;
+            creditBalance = creditBalance - (feeForSecond * seconds);
+            voiceEventsTime = voiceEventsTime + seconds;
         }
+
+    }
+
+    @Override
+    protected int availableCallSeconds(int seconds) {
+        double secondsAsMinute = (double) seconds / 60;
+        double feeForSecond = minuteCallFee / 60;
+        int remainingMinutesInSeconds = (int) (remainingMinutes * 60);
+        if (remainingMinutesInSeconds >= seconds) {
+            return seconds;
+        }
+        if (remainingMinutesInSeconds > 0) {
+            consumeData(remainingMinutesInSeconds);
+        }
+        double nonConsumedSecondsFromData = seconds - remainingMinutesInSeconds;
+        if (creditBalance >= (feeForSecond * nonConsumedSecondsFromData)) {
+            return (int) (nonConsumedSecondsFromData + remainingMinutesInSeconds);
+        }
+        return 0;
     }
 
     @Override
     protected boolean checkSmsAvailability() {
         if (remainingSms >= 1) {
             remainingSms--;
-            setSmsAmount(getSmsAmount() + 1);
+            smsAmount++;
             return true;
-        } else if (getCreditBalance() >= getSmsFee()) {
-            checkSmsAvailability();
         }
-        return false;
-
+        return super.checkSmsAvailability();
     }
 
     @Override
     protected boolean checkMmsAvailability() {
         if (remainingMms >= 1) {
             remainingMms--;
-            setMmsAmount(getMmsAmount() + 1);
+            mmsAmount++;
             return true;
         } else if (getCreditBalance() >= getMmsFee()) {
             this.checkMmsAvailability();

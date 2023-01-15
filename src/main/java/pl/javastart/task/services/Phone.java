@@ -17,27 +17,31 @@ public class Phone {
 
     public void sendSms() {
         if (contract.checkSmsAvailability()) {
-            System.out.println("SMS wysłany");
+            System.out.println(">>>>> SMS wysłany");
         } else {
-            System.out.println("nie udało się wsyłać SMS'a");
+            System.out.println(">>>>|nie udało się wsyłać SMS'a");
         }
     }
 
     public void call(int seconds) {
-        if (contract.checkCallAvailability(seconds)) {
-            System.out.println("Połączenie trwało " + seconds + " sekund");
+        int allowanceSeconds = contract.availableCallSeconds(seconds);
+        if (allowanceSeconds == seconds) {
+            System.out.println("@@ --- @@ Połączenie trwało " + seconds + " sekund");
+            contract.consumeData(seconds);
+        } else if (allowanceSeconds < seconds && allowanceSeconds > 0) {
+            System.out.println("@@ --- Połączenie przerwane, brak środków na koncie, Połączenie trwało " + allowanceSeconds + " sekund");
+            contract.consumeData(allowanceSeconds);
         } else {
-            System.out.println("Nie mona wykonać połączenia, brak środków na koncie");
+            System.out.println("--- Nie mona wykonać połączenia, brak środków na koncie");
         }
     }
 
     public void sendMms() {
         if (contract.checkMmsAvailability()) {
-            System.out.println("MMS wysłany");
+            System.out.println(">>>>> MMS wysłany");
         } else {
-            System.out.println("nie udało się wsyłać MMS'a");
+            System.out.println(">>>>>| nie udało się wsyłać MMS'a");
         }
-
     }
 
     public void printAccountState() {

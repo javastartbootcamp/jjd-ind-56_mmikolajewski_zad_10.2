@@ -1,10 +1,10 @@
 package pl.javastart.task.services;
 
 abstract class Contract {
-    private int smsAmount;
-    private int mmsAmount;
-    private int voiceEventsTime;
-    private double creditBalance;
+    protected int smsAmount;
+    protected int mmsAmount;
+    protected int voiceEventsTime;
+    protected double creditBalance;
 
     public int getSmsAmount() {
         return smsAmount;
@@ -40,9 +40,11 @@ abstract class Contract {
 
     protected abstract boolean checkSmsAvailability();
 
-    protected abstract boolean checkCallAvailability(int seconds);
+    protected abstract int availableCallSeconds(int seconds);
 
     protected abstract boolean checkMmsAvailability();
+
+    protected abstract void consumeData(int seconds);
 
     public void printAccountState() {
         System.out.println("=== STAN KONTA ===");

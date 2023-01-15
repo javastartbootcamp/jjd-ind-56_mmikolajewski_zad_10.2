@@ -1,9 +1,9 @@
 package pl.javastart.task.services;
 
 public class CardPhoneContract extends Contract {
-    private double smsFee;
-    private double mmsFee;
-    private double minuteCallFee;
+    protected double smsFee;
+    protected double mmsFee;
+    protected double minuteCallFee;
 
     public CardPhoneContract(double balance, double smsFee, double mmsFee, double minuteCallFee) {
         super.setCreditBalance(balance);
@@ -47,14 +47,22 @@ public class CardPhoneContract extends Contract {
     }
 
     @Override
-    protected boolean checkCallAvailability(int seconds) {
+    protected void consumeData(int seconds) {
         double feeForSecond = minuteCallFee / 60;
-        if (getCreditBalance() >= feeForSecond) {
-            setCreditBalance(getCreditBalance() - (feeForSecond * seconds));
-            setVoiceEventsTime(getVoiceEventsTime() + seconds);
-            return true;
+        creditBalance = creditBalance - (feeForSecond * seconds);
+        voiceEventsTime = voiceEventsTime + seconds;
+    }
+
+    @Override
+    protected int availableCallSeconds(int seconds) {
+        double feeForSecond = minuteCallFee / 60;
+        if (creditBalance >= (feeForSecond * seconds)) {
+            return seconds;
         }
-        return false;
+        if (creditBalance <= (feeForSecond * seconds)) {
+            return (int) (creditBalance / feeForSecond);
+        }
+        return 0;
     }
 
     @Override
