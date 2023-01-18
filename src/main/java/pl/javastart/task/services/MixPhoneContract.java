@@ -41,12 +41,12 @@ public class MixPhoneContract extends CardPhoneContract {
     protected int availableCallSeconds(int seconds) {
         double remainingMinutesAsSeconds = (int) (remainingMinutes * 60);
         double allowanceSeconds = 0;
-        if (remainingMinutesAsSeconds >= seconds) { // pobiera wszystko z pakietu minut
+        if (remainingMinutesAsSeconds >= seconds) { // pobiera wszystko z darmowych minut
             callInSeconds = callInSeconds + seconds;
             allowanceSeconds = seconds;
             remainingMinutes -= allowanceSeconds / 60;
             return (int) allowanceSeconds;
-        } else if (remainingMinutesAsSeconds > 0 && remainingMinutesAsSeconds < seconds) { // pobiera reszte z pakietu  minut
+        } else if (remainingMinutesAsSeconds > 0 && remainingMinutesAsSeconds < seconds) { // wybiera reszte z darmowych minut
             remainingMinutes = 0;
             callInSeconds = (int) (callInSeconds + remainingMinutesAsSeconds);
             allowanceSeconds += remainingMinutesAsSeconds;
@@ -61,7 +61,9 @@ public class MixPhoneContract extends CardPhoneContract {
             allowanceSeconds += secondsHasToBePayedFromCredit;
             return (int) allowanceSeconds;
         }
+
         int creditRating = (int) (creditBalance / feeForSecond);
+
         if (creditBalance > 0) { // dostępna tylko część creditu
             creditBalance -= creditRating * feeForSecond;
             callInSeconds = (callInSeconds + creditRating);

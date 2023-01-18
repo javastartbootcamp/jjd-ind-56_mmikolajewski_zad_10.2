@@ -22,7 +22,7 @@ public class Main {
         phone3.sendMms();
         phone3.printAccountState();
         System.out.println("<<<<<<<<<<<<<<<<<");
-        phone3.call(64); // przy 61 sekundzie przechodzi z pakietu minut na pobieranie opłaty.
+        phone3.call(64); // przy 61 sekundzie przechodzi z darmowych minut na pobieranie opłaty.
         phone3.printAccountState();
     }
 }
