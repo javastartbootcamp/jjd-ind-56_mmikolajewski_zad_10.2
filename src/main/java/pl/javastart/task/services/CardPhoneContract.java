@@ -58,8 +58,8 @@ public class CardPhoneContract extends Contract {
     void printTableOfFees() {
         System.out.println("Tabela opłat."
                 + " koszt wysłania: \n"
-                + " 1 SMS " + smsFee + "zł" +  "\n"
-                + " 1 MMS " + mmsFee + "zł" + "\n"
-                + " 1 minuta połączenia " + minuteCallFee + "zł" + "\n");
+                + " - 1 SMS " + smsFee + "zł" +  "\n"
+                + " - 1 MMS " + mmsFee + "zł" + "\n"
+                + " - 1 minuta połączenia " + minuteCallFee + "zł" + "\n");
     }
 }
