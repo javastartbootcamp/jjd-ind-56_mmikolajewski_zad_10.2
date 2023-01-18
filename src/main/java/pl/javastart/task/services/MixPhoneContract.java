@@ -37,55 +37,57 @@ public class MixPhoneContract extends CardPhoneContract {
         this.remainingMinutes = remainingMinutes;
     }
 
-    protected void consumeData(int seconds) {
-        double secondsAsMinute = (double) seconds / 60;
-        if (remainingMinutes >= secondsAsMinute) {
-            remainingMinutes -= secondsAsMinute;
-            voiceEventsTime = voiceEventsTime + seconds;
-        } else {
-            double feeForSecond = minuteCallFee / 60;
-            creditBalance = creditBalance - (feeForSecond * seconds);
-            voiceEventsTime = voiceEventsTime + seconds;
-        }
-
-    }
-
     @Override
     protected int availableCallSeconds(int seconds) {
-        double secondsAsMinute = (double) seconds / 60;
+        double remainingMinutesAsSeconds = (int) (remainingMinutes * 60);
+        double allowanceSeconds = 0;
+        if (remainingMinutesAsSeconds >= seconds) { // pobiera wszystko z pakietu minut
+            callInSeconds = callInSeconds + seconds;
+            allowanceSeconds = seconds;
+            remainingMinutes -= allowanceSeconds / 60;
+            return (int) allowanceSeconds;
+        } else if (remainingMinutesAsSeconds > 0 && remainingMinutesAsSeconds < seconds) { // pobiera reszte z pakietu  minut
+            remainingMinutes = 0;
+            callInSeconds = (int) (callInSeconds + remainingMinutesAsSeconds);
+            allowanceSeconds += remainingMinutesAsSeconds;
+        }
         double feeForSecond = minuteCallFee / 60;
-        int remainingMinutesInSeconds = (int) (remainingMinutes * 60);
-        if (remainingMinutesInSeconds >= seconds) {
-            return seconds;
+        int secondsHasToBePayedFromCredit = (int) (seconds - remainingMinutesAsSeconds);
+        double feeForSecondsFromCredit = secondsHasToBePayedFromCredit * feeForSecond;
+
+        if (creditBalance >= feeForSecondsFromCredit) { // wystarczająca ilość creditu
+            creditBalance = creditBalance - feeForSecondsFromCredit;
+            callInSeconds = callInSeconds + secondsHasToBePayedFromCredit;
+            allowanceSeconds += secondsHasToBePayedFromCredit;
+            return (int) allowanceSeconds;
         }
-        if (remainingMinutesInSeconds > 0) {
-            consumeData(remainingMinutesInSeconds);
+        int creditRating = (int) (creditBalance / feeForSecond);
+        if (creditBalance > 0) { // dostępna tylko część creditu
+            creditBalance -= creditRating * feeForSecond;
+            callInSeconds = (callInSeconds + creditRating);
+            allowanceSeconds += creditRating;
         }
-        double nonConsumedSecondsFromData = seconds - remainingMinutesInSeconds;
-        if (creditBalance >= (feeForSecond * nonConsumedSecondsFromData)) {
-            return (int) (nonConsumedSecondsFromData + remainingMinutesInSeconds);
-        }
-        return 0;
+        return (int) allowanceSeconds;
     }
 
     @Override
-    protected boolean checkSmsAvailability() {
+    protected boolean sendSms() {
         if (remainingSms >= 1) {
             remainingSms--;
             smsAmount++;
             return true;
         }
-        return super.checkSmsAvailability();
+        return super.sendSms();
     }
 
     @Override
-    protected boolean checkMmsAvailability() {
+    protected boolean sendMms() {
         if (remainingMms >= 1) {
             remainingMms--;
             mmsAmount++;
             return true;
         } else if (getCreditBalance() >= getMmsFee()) {
-            this.checkMmsAvailability();
+            this.sendMms();
         }
         return false;
     }

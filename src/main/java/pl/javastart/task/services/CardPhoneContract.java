@@ -37,39 +37,37 @@ public class CardPhoneContract extends Contract {
     }
 
     @Override
-    protected boolean checkSmsAvailability() {
-        if (getCreditBalance() >= smsFee) {
-            setCreditBalance(getCreditBalance() - smsFee);
-            setSmsAmount(getSmsAmount() + 1);
+    protected boolean sendSms() {
+        if (creditBalance >= smsFee) {
+            creditBalance = creditBalance - smsFee;
+            smsAmount++;
             return true;
         }
         return false;
     }
 
     @Override
-    protected void consumeData(int seconds) {
-        double feeForSecond = minuteCallFee / 60;
-        creditBalance = creditBalance - (feeForSecond * seconds);
-        voiceEventsTime = voiceEventsTime + seconds;
-    }
-
-    @Override
     protected int availableCallSeconds(int seconds) {
         double feeForSecond = minuteCallFee / 60;
         if (creditBalance >= (feeForSecond * seconds)) {
+            creditBalance = creditBalance - (feeForSecond * seconds);
+            callInSeconds = callInSeconds + seconds;
             return seconds;
         }
-        if (creditBalance <= (feeForSecond * seconds)) {
-            return (int) (creditBalance / feeForSecond);
+        if (creditBalance < (feeForSecond * seconds) && creditBalance > 0) {
+            int paidSeconds = (int) (creditBalance / feeForSecond);
+            creditBalance = creditBalance - (paidSeconds * feeForSecond);
+            callInSeconds = (callInSeconds + paidSeconds);
+            return paidSeconds;
         }
         return 0;
     }
 
     @Override
-    protected boolean checkMmsAvailability() {
-        if (getCreditBalance() >= mmsFee) {
-            setCreditBalance(getCreditBalance() - mmsFee);
-            setMmsAmount(getMmsAmount() + 1);
+    protected boolean sendMms() {
+        if (creditBalance >= mmsFee) {
+            creditBalance = creditBalance - mmsFee;
+            mmsAmount++;
             return true;
         }
         return false;

@@ -16,7 +16,7 @@ public class Phone {
     }
 
     public void sendSms() {
-        if (contract.checkSmsAvailability()) {
+        if (contract.sendSms()) {
             System.out.println(">>>>> SMS wysłany");
         } else {
             System.out.println(">>>>|nie udało się wsyłać SMS'a");
@@ -27,17 +27,15 @@ public class Phone {
         int allowanceSeconds = contract.availableCallSeconds(seconds);
         if (allowanceSeconds == seconds) {
             System.out.println("@@ --- @@ Połączenie trwało " + seconds + " sekund");
-            contract.consumeData(seconds);
         } else if (allowanceSeconds < seconds && allowanceSeconds > 0) {
-            System.out.println("@@ --- Połączenie przerwane, brak środków na koncie, Połączenie trwało " + allowanceSeconds + " sekund");
-            contract.consumeData(allowanceSeconds);
+            System.out.println("@@ ||| Połączenie przerwane, brak środków na koncie, Połączenie trwało " + allowanceSeconds + " sekund");
         } else {
             System.out.println("--- Nie mona wykonać połączenia, brak środków na koncie");
         }
     }
 
     public void sendMms() {
-        if (contract.checkMmsAvailability()) {
+        if (contract.sendMms()) {
             System.out.println(">>>>> MMS wysłany");
         } else {
             System.out.println(">>>>>| nie udało się wsyłać MMS'a");

@@ -4,7 +4,6 @@ public class BillPayPhoneContract extends Contract {
     private int billPayFee;
 
     public BillPayPhoneContract(int billPayFee) {
-        super.setCreditBalance(billPayFee);
         this.billPayFee = billPayFee;
     }
 
@@ -18,24 +17,19 @@ public class BillPayPhoneContract extends Contract {
 
     @Override
     protected int availableCallSeconds(int seconds) {
-        voiceEventsTime = voiceEventsTime + seconds;
+        callInSeconds = callInSeconds + seconds;
         return seconds;
     }
 
     @Override
-    protected boolean checkSmsAvailability() {
+    protected boolean sendSms() {
         smsAmount++;
         return true;
     }
 
     @Override
-    protected boolean checkMmsAvailability() {
+    protected boolean sendMms() {
         mmsAmount++;
         return true;
-    }
-
-    @Override
-    protected void consumeData(int soconds) {
-
     }
 }

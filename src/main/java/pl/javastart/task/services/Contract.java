@@ -3,7 +3,7 @@ package pl.javastart.task.services;
 abstract class Contract {
     protected int smsAmount;
     protected int mmsAmount;
-    protected int voiceEventsTime;
+    protected int callInSeconds;
     protected double creditBalance;
 
     public int getSmsAmount() {
@@ -22,12 +22,12 @@ abstract class Contract {
         this.mmsAmount = mmsAmount;
     }
 
-    public int getVoiceEventsTime() {
-        return voiceEventsTime;
+    public int getCallInSeconds() {
+        return callInSeconds;
     }
 
-    protected void setVoiceEventsTime(int voiceEventsTime) {
-        this.voiceEventsTime = voiceEventsTime;
+    protected void setCallInSeconds(int callInSeconds) {
+        this.callInSeconds = callInSeconds;
     }
 
     public double getCreditBalance() {
@@ -38,19 +38,17 @@ abstract class Contract {
         this.creditBalance = creditBalance;
     }
 
-    protected abstract boolean checkSmsAvailability();
+    protected abstract boolean sendSms();
 
     protected abstract int availableCallSeconds(int seconds);
 
-    protected abstract boolean checkMmsAvailability();
-
-    protected abstract void consumeData(int seconds);
+    protected abstract boolean sendMms();
 
     public void printAccountState() {
         System.out.println("=== STAN KONTA ===");
         System.out.println("Wysłanych SMSów:" + smsAmount + "\n"
                 + "Wysłanych MMSów:" + mmsAmount + "\n"
-                + "Liczba sekund rozmowy: " + voiceEventsTime + "\n"
+                + "Liczba sekund rozmowy: " + callInSeconds + "\n"
                 + "Na koncie zostało: " + creditBalance);
     }
 }
