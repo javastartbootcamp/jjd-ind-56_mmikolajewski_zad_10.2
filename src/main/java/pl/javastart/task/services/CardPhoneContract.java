@@ -1,43 +1,19 @@
 package pl.javastart.task.services;
 
 public class CardPhoneContract extends Contract {
-    protected double smsFee;
-    protected double mmsFee;
-    protected double minuteCallFee;
+    double smsFee;
+    double mmsFee;
+    double minuteCallFee;
 
     public CardPhoneContract(double balance, double smsFee, double mmsFee, double minuteCallFee) {
-        super.setCreditBalance(balance);
+        super.creditBalance = balance;
         this.smsFee = smsFee;
         this.mmsFee = mmsFee;
-        this.minuteCallFee = minuteCallFee;
-    }
-
-    public double getSmsFee() {
-        return smsFee;
-    }
-
-    protected void setSmsFee(double smsFee) {
-        this.smsFee = smsFee;
-    }
-
-    public double getMmsFee() {
-        return mmsFee;
-    }
-
-    protected void setMmsFee(double mmsFee) {
-        this.mmsFee = mmsFee;
-    }
-
-    public double getMinuteCallFee() {
-        return minuteCallFee;
-    }
-
-    protected void setMinuteCallFee(double minuteCallFee) {
         this.minuteCallFee = minuteCallFee;
     }
 
     @Override
-    protected boolean sendSms() {
+    boolean sendSms() {
         if (creditBalance >= smsFee) {
             creditBalance = creditBalance - smsFee;
             smsAmount++;
@@ -47,7 +23,7 @@ public class CardPhoneContract extends Contract {
     }
 
     @Override
-    protected int availableCallSeconds(int seconds) {
+    int availableCallSeconds(int seconds) {
         double feeForSecond = minuteCallFee / 60;
         if (creditBalance >= (feeForSecond * seconds)) {
             creditBalance = creditBalance - (feeForSecond * seconds);
@@ -64,7 +40,7 @@ public class CardPhoneContract extends Contract {
     }
 
     @Override
-    protected boolean sendMms() {
+    boolean sendMms() {
         if (creditBalance >= mmsFee) {
             creditBalance = creditBalance - mmsFee;
             mmsAmount++;
@@ -74,7 +50,16 @@ public class CardPhoneContract extends Contract {
     }
 
     @Override
-    public void printAccountState() {
+    void printAccountState() {
         super.printAccountState();
+    }
+
+    @Override
+    void printTableOfFees() {
+        System.out.println("Tabela opłat."
+                + " koszt wysłania: \n"
+                + " 1 SMS " + smsFee + "zł" +  "\n"
+                + " 1 MMS " + mmsFee + "zł" + "\n"
+                + " 1 minuta połączenia " + minuteCallFee + "zł" + "\n");
     }
 }

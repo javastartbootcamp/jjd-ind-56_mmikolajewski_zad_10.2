@@ -1,35 +1,32 @@
 package pl.javastart.task.services;
 
 public class BillPayPhoneContract extends Contract {
-    private int billPayFee;
+    int billPayFee;
 
     public BillPayPhoneContract(int billPayFee) {
         this.billPayFee = billPayFee;
     }
 
-    public int getBillPayFee() {
-        return billPayFee;
-    }
-
-    protected void setBillPayFee(int billPayFee) {
-        this.billPayFee = billPayFee;
-    }
-
     @Override
-    protected int availableCallSeconds(int seconds) {
+    int availableCallSeconds(int seconds) {
         callInSeconds = callInSeconds + seconds;
         return seconds;
     }
 
     @Override
-    protected boolean sendSms() {
+    boolean sendSms() {
         smsAmount++;
         return true;
     }
 
     @Override
-    protected boolean sendMms() {
+    boolean sendMms() {
         mmsAmount++;
         return true;
+    }
+
+    @Override
+    void printTableOfFees() {
+        System.out.println("Tabela opłat, wszystkie usługi - NO LIMIT");
     }
 }

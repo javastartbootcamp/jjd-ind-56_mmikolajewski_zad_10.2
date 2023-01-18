@@ -7,14 +7,6 @@ public class Phone {
         this.contract = contract;
     }
 
-    public Contract getContract() {
-        return contract;
-    }
-
-    public void setContract(Contract contract) {
-        this.contract = contract;
-    }
-
     public void sendSms() {
         if (contract.sendSms()) {
             System.out.println(">>>>> SMS wysłany");
@@ -44,5 +36,9 @@ public class Phone {
 
     public void printAccountState() {
         contract.printAccountState();
+    }
+
+    public void printTableOfFees() {
+        contract.printTableOfFees();
     }
 }
