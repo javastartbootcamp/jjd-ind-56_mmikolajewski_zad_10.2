@@ -15,12 +15,12 @@ public class Phone {
         }
     }
 
-    public void call(int seconds) {
-        int allowanceSeconds = contract.availableCallSeconds(seconds);
-        if (allowanceSeconds == seconds) {
-            System.out.println("@@ --- @@ Połączenie trwało " + seconds + " sekund");
-        } else if (allowanceSeconds < seconds && allowanceSeconds > 0) {
-            System.out.println("@@ ||| Połączenie przerwane, brak środków na koncie, Połączenie trwało " + allowanceSeconds + " sekund");
+    public void call(int expectedCallLengthInSeconds) {
+        int availableSeconds = contract.calculatingAvailableSeconds(expectedCallLengthInSeconds);
+        if (availableSeconds == expectedCallLengthInSeconds) {
+            System.out.println("@@ --- @@ Połączenie trwało " + expectedCallLengthInSeconds + " sekund");
+        } else if (availableSeconds < expectedCallLengthInSeconds && availableSeconds > 0) {
+            System.out.println("@@ ||| Połączenie przerwane, brak środków na koncie, Połączenie trwało " + availableSeconds + " sekund");
         } else {
             System.out.println("--- Nie mona wykonać połączenia, brak środków na koncie");
         }

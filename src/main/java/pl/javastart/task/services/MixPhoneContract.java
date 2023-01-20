@@ -14,22 +14,22 @@ public class MixPhoneContract extends CardPhoneContract {
     }
 
     @Override
-    int availableCallSeconds(int seconds) {
-        double remainingMinutesAsSeconds = (int) (remainingMinutes * 60);
-        double allowanceSeconds = 0;
-        if (remainingMinutesAsSeconds >= seconds) { // pobiera wszystko z darmowych minut
-            callInSeconds = callInSeconds + seconds;
-            allowanceSeconds = seconds;
-            remainingMinutes -= allowanceSeconds / 60;
-            return (int) allowanceSeconds;
-        } else if (remainingMinutesAsSeconds > 0 && remainingMinutesAsSeconds < seconds) { // wybiera reszte z darmowych minut
+    int calculatingAvailableSeconds(int expectedCallLengthInSeconds) {
+        double remainingSeconds = (int) (remainingMinutes * 60);
+        double availableSecondsToCall = 0;
+        if (remainingSeconds >= expectedCallLengthInSeconds) { // pobiera wszystko z darmowych minut
+            callInSeconds = callInSeconds + expectedCallLengthInSeconds;
+            availableSecondsToCall = expectedCallLengthInSeconds;
+            remainingMinutes -= availableSecondsToCall / 60;
+            return (int) availableSecondsToCall;
+        } else if (remainingSeconds > 0 && remainingSeconds < expectedCallLengthInSeconds) { // wybiera reszte z darmowych minut
             remainingMinutes = 0;
-            callInSeconds = (int) (callInSeconds + remainingMinutesAsSeconds);
-            allowanceSeconds += remainingMinutesAsSeconds;
+            callInSeconds = (int) (callInSeconds + remainingSeconds);
+            availableSecondsToCall += remainingSeconds;
         }
-        int secondsHasToBePayedFromCredit = (int) (seconds - remainingMinutesAsSeconds);
-        allowanceSeconds += super.availableCallSeconds(secondsHasToBePayedFromCredit);
-        return (int) allowanceSeconds;
+        int secondsToPay = (int) (expectedCallLengthInSeconds - remainingSeconds);
+        availableSecondsToCall += super.calculatingAvailableSeconds(secondsToPay);
+        return (int) availableSecondsToCall;
     }
 
     @Override

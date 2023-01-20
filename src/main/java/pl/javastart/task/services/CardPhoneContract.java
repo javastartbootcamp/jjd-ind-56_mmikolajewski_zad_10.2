@@ -23,7 +23,7 @@ public class CardPhoneContract extends Contract {
     }
 
     @Override
-    int availableCallSeconds(int seconds) {
+    int calculatingAvailableSeconds(int seconds) {
         double feeForSecond = minuteCallFee / 60;
         if (creditBalance >= (feeForSecond * seconds)) {
             creditBalance = creditBalance - (feeForSecond * seconds);

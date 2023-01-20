@@ -8,7 +8,7 @@ abstract class Contract {
 
     abstract boolean sendSms();
 
-    abstract int availableCallSeconds(int seconds);
+    abstract int calculatingAvailableSeconds(int seconds);
 
     abstract boolean sendMms();
 

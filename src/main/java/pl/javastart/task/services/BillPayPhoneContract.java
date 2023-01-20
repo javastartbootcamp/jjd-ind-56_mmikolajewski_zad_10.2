@@ -8,7 +8,7 @@ public class BillPayPhoneContract extends Contract {
     }
 
     @Override
-    int availableCallSeconds(int seconds) {
+    int calculatingAvailableSeconds(int seconds) {
         callInSeconds = callInSeconds + seconds;
         return seconds;
     }
