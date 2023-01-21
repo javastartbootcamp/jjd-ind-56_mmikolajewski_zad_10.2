@@ -39,12 +39,7 @@ public class MixPhoneContract extends CardPhoneContract {
             smsAmount++;
             return true;
         }
-        if (creditBalance >= mmsFee) {
-            creditBalance = creditBalance - mmsFee;
-            mmsAmount++;
-            return true;
-        }
-        return false;
+        return super.sendSms();
     }
 
     @Override
@@ -53,12 +48,8 @@ public class MixPhoneContract extends CardPhoneContract {
             remainingMms--;
             mmsAmount++;
             return true;
-        } else if (creditBalance >= mmsFee) {
-            creditBalance = creditBalance - mmsFee;
-            mmsAmount++;
-            return true;
         }
-        return false;
+        return super.sendMms();
     }
 
     @Override
