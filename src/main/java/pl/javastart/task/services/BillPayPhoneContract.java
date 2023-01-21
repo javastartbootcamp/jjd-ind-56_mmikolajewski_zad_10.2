@@ -1,0 +1,32 @@
+package pl.javastart.task.services;
+
+public class BillPayPhoneContract extends Contract {
+    int billPayFee;
+
+    public BillPayPhoneContract(int billPayFee) {
+        this.billPayFee = billPayFee;
+    }
+
+    @Override
+    boolean sendSms() {
+        smsAmount++;
+        return true;
+    }
+
+    @Override
+    boolean sendMms() {
+        mmsAmount++;
+        return true;
+    }
+
+    @Override
+    int calculatingAvailableSeconds(int seconds) {
+        callInSeconds = callInSeconds + seconds;
+        return seconds;
+    }
+
+    @Override
+    void printTableOfFees() {
+        System.out.println("Tabela opłat, wszystkie usługi - NO LIMIT");
+    }
+}
