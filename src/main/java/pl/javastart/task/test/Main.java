@@ -22,7 +22,6 @@ public class Main {
         phone3.sendSms();
         phone3.sendSms();
         phone3.sendSms();
-
         phone3.printAccountState();
         System.out.println("<<<<<<<<<<<<<<<<<");
         phone3.call(119); // przy 61 sekundzie przechodzi z darmowych minut na pobieranie opłaty.
