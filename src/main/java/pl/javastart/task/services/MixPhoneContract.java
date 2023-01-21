@@ -14,25 +14,6 @@ public class MixPhoneContract extends CardPhoneContract {
     }
 
     @Override
-    int calculatingAvailableSeconds(int expectedCallLengthInSeconds) {
-        double remainingSeconds = (int) (remainingMinutes * 60);
-        double availableSecondsToCall = 0;
-        if (remainingSeconds >= expectedCallLengthInSeconds) { // pobiera wszystko z darmowych minut
-            callInSeconds = callInSeconds + expectedCallLengthInSeconds;
-            availableSecondsToCall = expectedCallLengthInSeconds;
-            remainingMinutes -= availableSecondsToCall / 60;
-            return (int) availableSecondsToCall;
-        } else if (remainingSeconds > 0 && remainingSeconds < expectedCallLengthInSeconds) { // wybiera reszte z darmowych minut
-            remainingMinutes = 0;
-            callInSeconds = (int) (callInSeconds + remainingSeconds);
-            availableSecondsToCall += remainingSeconds;
-        }
-        int secondsToPay = (int) (expectedCallLengthInSeconds - remainingSeconds);
-        availableSecondsToCall += super.calculatingAvailableSeconds(secondsToPay);
-        return (int) availableSecondsToCall;
-    }
-
-    @Override
     boolean sendSms() {
         if (remainingSms >= 1) {
             remainingSms--;
@@ -50,6 +31,25 @@ public class MixPhoneContract extends CardPhoneContract {
             return true;
         }
         return super.sendMms();
+    }
+
+    @Override
+    int calculatingAvailableSeconds(int expectedCallLengthInSeconds) {
+        double remainingSeconds = (int) (remainingMinutes * 60);
+        double availableSecondsToCall = 0;
+        if (remainingSeconds >= expectedCallLengthInSeconds) { // pobiera wszystko z darmowych minut
+            callInSeconds = callInSeconds + expectedCallLengthInSeconds;
+            availableSecondsToCall = expectedCallLengthInSeconds;
+            remainingMinutes -= availableSecondsToCall / 60;
+            return (int) availableSecondsToCall;
+        } else if (remainingSeconds > 0 && remainingSeconds < expectedCallLengthInSeconds) { // wybiera reszte z darmowych minut
+            remainingMinutes = 0;
+            callInSeconds = (int) (callInSeconds + remainingSeconds);
+            availableSecondsToCall += remainingSeconds;
+        }
+        int secondsToPay = (int) (expectedCallLengthInSeconds - remainingSeconds);
+        availableSecondsToCall += super.calculatingAvailableSeconds(secondsToPay);
+        return (int) availableSecondsToCall;
     }
 
     @Override

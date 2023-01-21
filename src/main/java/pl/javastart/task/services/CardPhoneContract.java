@@ -23,6 +23,16 @@ public class CardPhoneContract extends Contract {
     }
 
     @Override
+    boolean sendMms() {
+        if (creditBalance >= mmsFee) {
+            creditBalance = creditBalance - mmsFee;
+            mmsAmount++;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     int calculatingAvailableSeconds(int seconds) {
         double feeForSecond = minuteCallFee / 60;
         if (creditBalance >= (feeForSecond * seconds)) {
@@ -37,16 +47,6 @@ public class CardPhoneContract extends Contract {
             return paidSeconds;
         }
         return 0;
-    }
-
-    @Override
-    boolean sendMms() {
-        if (creditBalance >= mmsFee) {
-            creditBalance = creditBalance - mmsFee;
-            mmsAmount++;
-            return true;
-        }
-        return false;
     }
 
     @Override

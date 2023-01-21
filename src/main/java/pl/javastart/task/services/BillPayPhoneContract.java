@@ -8,12 +8,6 @@ public class BillPayPhoneContract extends Contract {
     }
 
     @Override
-    int calculatingAvailableSeconds(int seconds) {
-        callInSeconds = callInSeconds + seconds;
-        return seconds;
-    }
-
-    @Override
     boolean sendSms() {
         smsAmount++;
         return true;
@@ -23,6 +17,12 @@ public class BillPayPhoneContract extends Contract {
     boolean sendMms() {
         mmsAmount++;
         return true;
+    }
+
+    @Override
+    int calculatingAvailableSeconds(int seconds) {
+        callInSeconds = callInSeconds + seconds;
+        return seconds;
     }
 
     @Override

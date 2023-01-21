@@ -8,9 +8,9 @@ abstract class Contract {
 
     abstract boolean sendSms();
 
-    abstract int calculatingAvailableSeconds(int seconds);
-
     abstract boolean sendMms();
+
+    abstract int calculatingAvailableSeconds(int seconds);
 
     void printAccountState() {
         System.out.println("=== STAN KONTA ===");
@@ -21,6 +21,5 @@ abstract class Contract {
     }
 
     void printTableOfFees() {
-
     }
 }
